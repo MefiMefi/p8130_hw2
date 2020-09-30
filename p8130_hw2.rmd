@@ -1,0 +1,121 @@
+---
+title: "p8130_hw2"
+author: "Renjie Wei"
+date: "2020/9/30"
+output: html_document
+---
+
+
+```{r global_options, include=FALSE}
+knitr::opts_chunk$set(fig.width=12, fig.height=8, fig.path='Figs/',
+                   echo=FALSE, warning=FALSE, message=FALSE)
+```
+
+
+```{r}
+library(arsenal)
+library(dplyr)
+library(ggplot2)
+options(digits=3)
+```
+# Problem 1
+
+1) From the data, we can get a table like this:
+```{r problem_1, tidy = TRUE}
+cancer_mtrx <- matrix(
+  c(79,34,113,10,217-10,217,79+10,34+217-10,217+113),
+  nr = 3,
+  dimnames = list(
+    c("Pos","Neg","Total"),
+    c("Yes","No","Total")
+    
+  )
+)
+
+cancer_mtrx
+```
+
+According to the definition of sensitivity and specificity, we can calculate:
+  
+  + `sensitivity` = $P(Pos|Yes)$ = 79/113 = `r 79/113 * 100`%.
+  + `specificity` = $P(Neg|No)$ = 207/217 = `r 207/217 * 100`%.
+  
+2) No, the prevalance among the subjects is missing.
+
+3)
+  a) 
+  
+  
+  
+  
+# Problem 2
+
+Let $X $represent the number of the 50 patients who develop prediabetic. Then $X \sim B(50,0.345)$.
+
+1) Probability that none of these patients are prediabetic is:
+```{r}
+dbinom(0, 50, 0.345)
+```
+
+2) Probability that less than 10 patients are prediabetic is:
+```{r}
+pbinom(9, 50, 0.345)
+```
+
+3)
+The approximate number of patients number is:
+```{r}
+round(50*0.345)
+```
+So, the probability that 34.5% of these patients are prediabetic is:
+```{r}
+dbinom(17,50,0.345)
+```
+
+4)
+We can't use an approximation method to caculate the probabilities above, because the conditions of using a Poisson approximation are:
+  + $n$ must be larger than 100.
+  + Probability of success, $p$, should be smaller than 0.01.
+
+In our situation, $n=50$, $p=0.345$ we can not satisfy any condition. So, in this case, using an approximation is not appropriate.
+
+# Problem 3
+```{r}
+lambda_us = (5/1000000) * 8300000
+lambda_non_his = (6.02/1000000)*8300000*0.428
+lambda_blk = (0.31/1000000)*8300000*0.243
+lambda_asian = (0.39/1000000)*8300000*0.14
+```
+a. Let $X$, a random variable denoting the number of uveal melanoma cases in NYC. Then $X \sim Poi(`r lambda_us`)$.
+
+    The probability that in NYC, exactly 30 cases occur in a given year is:
+```{r}
+dpois(30, lambda_us)
+```
+
+b. 
+* Let $X_{White}$ denoting the number of uveal melanoma cases of non-Hispanic Whites in NYC.
+  + ${X_{White} \sim Poi(`r lambda_non_his`)}$
+* Let $X_{Black}$ denoting the number of uveal melanoma cases of Black in NYC.
+  + $X_{Black} \sim Poi(`r lambda_blk`)$ 
+* Let $X_{Asian}$ denoting the number of uveal melanoma cases of Asians in NYC.
+  + $X_{Asian} \sim Poi(`r lambda_asian`)$ 
+
+# Problem 4
+Since the average temperature of patients diagnosed with COVID-19 follow a normal distribution with a mean of 99.9 degrees Fahrenheit and a standard deviation of 0.73 degrees Fahrenheit. We can get:
+
+$$ {{\overline{X}} \sim N(99.9,\frac{0.73^{2}}{{40}})}$$
+1) The probability that the sample mean is less than 98:
+  
+  + $P(\overline{X}<98)=`r pnorm(98,mean=99.9,sd=0.73)`$
+  
+2) The probability that the sample mean is greater than 100.5:
+
+  + $P(\overline{X}>100.5)=`r 1-pnorm(100.5,mean=99.9,sd=0.73)`$
+  
+3) The 90th quantile of the sampling distribution of the sample mean:
+
+  + $Z_{90}=`r qnorm(0.90,mean=99.9,sd=0.73)`$
+  
+4) The cutoff values for the middle 50% of the sampling distribution of the sample mean:
+  + $Z_{50}=`r qnorm(0.50,mean=99.9,sd=0.73)`$
